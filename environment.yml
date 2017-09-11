@@ -20,3 +20,4 @@ dependencies:
         - pandashells==0.1.8
         - seaborn==0.8.1
         - supersmoother==0.4
+        - braket-daq
