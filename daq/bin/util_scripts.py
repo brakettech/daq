@@ -27,6 +27,13 @@ def server(port=None):
     if port is None:
         port = '8000'
 
+    print('\n\n')
+    print('-'*80)
+    print(f'Point your browser to http://localhost:{port}')
+    print('-'*80)
+    print('\n\n')
+
+
     p = subprocess.Popen(['gunicorn', f'--pythonpath={PROJ_PATH}', 'daq.wsgi', '-b', f'0.0.0.0:{port}'])
     p.wait()
 
