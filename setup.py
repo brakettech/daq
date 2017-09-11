@@ -34,14 +34,12 @@ setup(
     name="braket-daq",
     version=version(os.path.join(file_dir, 'daq', '__init__.py')),
     author="Rob deCarvalho",
-    author_email="unlisted",
+    author_email="unlisted@unlisted.net",
     description=("Picoscope file handling project"),
     license="BSD",
     keywords=("picoscope"),
     url="https://github.com/",
     packages=find_packages(),
-    # package_data={'pandashells': ['example_data/*.csv']},
-    # include_package_data=True,
     long_description=LONG_DESCRIPTION,
     classifiers=[
         'Environment :: Console',
@@ -51,21 +49,17 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Topic :: Scientific/Engineering',
     ],
-    ## If you add/remove a requirement, please also update full
-    #extras_require={
-    #    'console': [
-    #        'numpy', 'pandas', 'scipy', 'patsy', 'statsmodels', 'scikit-learn',
-    #        'supersmoother', 'gatspy',
-    #    ],
-    #    'full': [
-    #        'numpy', 'pandas', 'scipy', 'patsy', 'statsmodels', 'scikit-learn',
-    #        'supersmoother', 'gatspy', 'matplotlib', 'jinja2', 'mpld3',
-    #        'seaborn',
-    #    ],
-    #},
+    install_requires = [
+        'hug',
+        'gunicorn'
+    ],
     entry_points={
         'console_scripts': [
-            'daq.version = daq.bin.daq_version:main',
+            'daq.version = daq.bin.util_scripts:version.interface.cli',
+            'daq.pwd = daq.bin.util_scripts:pwd.interface.cli',
+            'daq.server = daq.bin.util_scripts:server.interface.cli',
+            'daq.infect = daq.bin.util_scripts:infect.interface.cli',
+            'daq.update = daq.bin.util_scripts:update.interface.cli',
         ],
     }
 )
