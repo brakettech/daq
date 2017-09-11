@@ -57,4 +57,6 @@ def infect():
 
 @hug.cli()
 def update():
-    print('updating daq')
+    cmd = 'pip install -U braket-daq'
+    print(cmd)
+    os.system(cmd)
