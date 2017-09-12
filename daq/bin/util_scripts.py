@@ -61,9 +61,3 @@ def infect():
             print(f'\n\ninfecting {bashrc}')
             f.seek(0, 2)
             f.write(script)
-
-@hug.cli()
-def update():
-    cmd = 'pip install -U braket-daq'
-    print(cmd)
-    os.system(cmd)

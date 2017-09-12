@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 #from apps.main.views import ExperimentList
-from apps.main.views import (
+from .views import (
     ExperimentListView,
     NewExperimentView,
     ConfigListView,
@@ -13,7 +13,6 @@ from apps.main.views import (
     TagFileView,
     NewConfigView,
     NewParamView, ChangeParamView, DeleteParamView, TagResultView, NCView)
-from apps.main import views
 
 
 urlpatterns = [

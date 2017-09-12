@@ -10,9 +10,9 @@ from django.views.generic import FormView, DeleteView, CreateView, UpdateView, T
 from django.views.generic import ListView
 from django.utils.text import slugify
 
-from apps.main.models import Experiment, Configuration
-from apps.main.models import Parameter
-from pico import Data
+from .models import Experiment, Configuration
+from .models import Parameter
+from ..pico import Data
 
 APP_NAME = 'main'
 DEFAULT_PATH = '/daqroot'

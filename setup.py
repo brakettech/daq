@@ -59,7 +59,6 @@ setup(
             'daq.pwd = daq.bin.util_scripts:pwd.interface.cli',
             'daq.server = daq.bin.util_scripts:server.interface.cli',
             'daq.infect = daq.bin.util_scripts:infect.interface.cli',
-            'daq.update = daq.bin.util_scripts:update.interface.cli',
         ],
     }
 )
