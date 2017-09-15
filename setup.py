@@ -55,10 +55,9 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'daq.version = daq.bin.util_scripts:version.interface.cli',
-            'daq.pwd = daq.bin.util_scripts:pwd.interface.cli',
-            'daq.server = daq.bin.util_scripts:server.interface.cli',
-            'daq.infect = daq.bin.util_scripts:infect.interface.cli',
+            'daq.version = daq.commands:version.interface.cli',
+            'daq.cd = daq.commands:cd.interface.cli',
+            'daq.infect = daq.commands:infect.interface.cli',
         ],
     }
 )

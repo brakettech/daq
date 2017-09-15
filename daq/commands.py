@@ -5,16 +5,20 @@ import subprocess
 import os
 import textwrap
 
-PWD = pathlib.Path(__file__).resolve()
-PROJ_PATH = PWD.parent.parent.resolve()
-VERSION_FILE = PWD.parent.joinpath('__init__.py').resolve()
-SCRIPT_FILE = PWD.parent.joinpath('scripts.sh').resolve()
-print('---------')
-print(__file__)
-print(PWD)
-print(PROJ_PATH)
-print(VERSION_FILE)
-print(SCRIPT_FILE)
+PWD = pathlib.Path(__file__).parent.resolve()
+PROJ_PATH = PWD.parent.resolve()
+VERSION_FILE = PWD.joinpath('__init__.py').resolve()
+SCRIPT_FILE = PWD.joinpath('scripts.sh').resolve()
+SERVER_PROJECT_PATH = pathlib.Path(os.path.expanduser('~/daq_server'))
+
+
+def run(cmd, echo=True, dry_run=False):
+    if echo:
+        print(cmd)
+
+    if not dry_run:
+        os.system(cmd)
+
 
 @hug.cli()
 def version():
@@ -25,10 +29,25 @@ def version():
     if version_match:
         print('braket-daq=={}'.format(version_match.group(1)))
 
+
+@hug.cli()
+def cd():
+    run(f'cd {SERVER_PROJECT_PATH}')
+
+
 @hug.cli()
 def infect():
-    copy dotfiles bashrc to home
-    append the scripts file
+    commands = [
+        'rm ~/.bashrc',
+        f'cat ~/dot_files/.bashrc {SCRIPT_FILE} > ~/.bashrc',
+    ]
+    for cmd in commands:
+        run(cmd)
+
+    print('\n\n')
+    print('Run this command to complete infection:  . ~/.bashrc')
+    print()
+
 
 # @hug.cli()
 # def server(port=None):
