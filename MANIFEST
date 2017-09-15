@@ -1,1 +1,1 @@
-recursive-include daq *.txt *.py
+recursive-include daq *.sh *.py
