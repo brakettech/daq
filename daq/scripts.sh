@@ -12,9 +12,11 @@ daq.init() {
 # function that allows remote ssh access via ngrok
 daq.ngrok() {
     sudo service ssh --full-restart
-    ngrok tcp --log stdout --region=us --remote-addr 1.tcp.ngrok.io:22084 22
+    ngrok tcp  --region=us --remote-addr braket@1.tcp.ngrok.io:22084 22
 }
 
-daq.update() {
-    pip install -U braket-daq
+# daq to connect to remote (windows) machine
+daq.remote() {
+    ssh rob@1.tcp.ngrok.io -p 22084
+
 }

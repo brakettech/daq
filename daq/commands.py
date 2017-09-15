@@ -48,43 +48,7 @@ def infect():
     print('Run this command to complete infection:  . ~/.bashrc')
     print()
 
+@hug.cli()
+def update():
+    run('pip install -U braket-daq')
 
-# @hug.cli()
-# def server(port=None):
-#     if port is None:
-#         port = '8000'
-#
-#     print('\n\n')
-#     print('-'*80)
-#     print(f'Point your browser to http://localhost:{port}')
-#     print('-'*80)
-#     print('\n\n')
-#
-#
-#     p = subprocess.Popen(['gunicorn', f'--pythonpath={PROJ_PATH}', 'daq.wsgi', '-b', f'0.0.0.0:{port}'])
-#     p.wait()
-#
-# @hug.cli()
-# def infect():
-#     script = textwrap.dedent(
-#         '\n\n\n'
-#         '# function to put daq tools on the path\n'
-#         'daq.init() {\n'
-#         'export PATH="$HOME/miniconda/bin:$PATH"\n'
-#         '    export PATH="$HOME/miniconda3/bin:$PATH"\n'
-#         '    export PATH="$HOME/anaconda/bin:$PATH"\n'
-#         '    export PATH="$HOME/anaconda3/bin:$PATH"\n'
-#         '    export PATH=/Users/rob/anaconda3/bin:$PATH\n'
-#         '        . activate daq\n'
-#         '}'
-#     )
-#     bashrc = pathlib.Path(os.path.expanduser('~')).joinpath('.bashrc')
-#     with open(bashrc.as_posix(), 'r+') as f:
-#         contents = f.read()
-#
-#         if 'daq.init()' in contents:
-#             print('Already infected, nothing to do')
-#         else:
-#             print(f'\n\ninfecting {bashrc}')
-#             f.seek(0, 2)
-#             f.write(script)

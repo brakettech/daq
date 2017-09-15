@@ -58,6 +58,7 @@ setup(
             'daq.version = daq.commands:version.interface.cli',
             'daq.cd = daq.commands:cd.interface.cli',
             'daq.infect = daq.commands:infect.interface.cli',
+            'daq.update = daq.commands:infect.update.cli',
         ],
     }
 )
