@@ -40,6 +40,7 @@ setup(
     keywords=("picoscope"),
     url="https://github.com/",
     packages=find_packages(),
+    package_data={'daq': ['*.sh']},
     long_description=LONG_DESCRIPTION,
     classifiers=[
         'Environment :: Console',
