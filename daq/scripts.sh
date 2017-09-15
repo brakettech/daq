@@ -1,4 +1,5 @@
 
+############ DAQ FUNCTIONS #############################
 # function to put daq tools on the path\n
 daq.init() {
     export PATH="$HOME/miniconda/bin:$PATH"
@@ -20,3 +21,7 @@ daq.remote() {
     ssh rob@1.tcp.ngrok.io -p 22084
 
 }
+############ END DAQ FUNCTIONS #############################
+
+
+

@@ -1,9 +1,7 @@
 import pathlib
 import re
 import hug
-import subprocess
 import os
-import textwrap
 
 PWD = pathlib.Path(__file__).parent.resolve()
 PROJ_PATH = PWD.parent.resolve()
@@ -39,7 +37,7 @@ def cd():
 def infect():
     commands = [
         'rm ~/.bashrc',
-        f'cat ~/dot_files/.bashrc {SCRIPT_FILE} > ~/.bashrc',
+        f'cat {SCRIPT_FILE} ~/dot_files/.bashrc  > ~/.bashrc',
     ]
     for cmd in commands:
         run(cmd)
