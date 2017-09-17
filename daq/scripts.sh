@@ -30,6 +30,9 @@ daq.cd() {
 
 # command to start server
 daq.server() {
+    daq.init
+    daq.cd
+    daq.configure
     echo
     echo
     echo ===============================================
@@ -40,8 +43,42 @@ daq.server() {
     echo
     echo ===============================================
     echo
-    daq.cd
     gunicorn daq.wsgi -b 0.0.0.0:8888
+
+}
+
+# print command usage to console
+daq.help() {
+    echo
+    echo ======================================================================
+    echo DAQ COMMANDS
+    echo
+    echo ----------------------------------------------------------------------
+    echo COMMONLY USED COMMANDS
+    echo
+    echo "daq.server     # start the daq server"
+    echo
+    echo "daq.init       # set conda to the daq python install"
+    echo
+    echo "daq.ngrok      # allow ngrok access to this computer"
+    echo
+    echo "daq.backup     # dump the database to a json file in the dbdump directory"
+    echo
+    echo
+    echo ----------------------------------------------------------------------
+    echo RARELY USED COMMANDS
+    echo
+    echo "daq.cd         # change to the daq server directory"
+    echo
+    echo "daq.configure  # Do initial server setup"
+    echo
+    echo "daq.infect     # alter the .bashrc to have non-python daq commands"
+    echo
+    echo "daq.remote     # command run by another computer to log into this one"
+    echo
+    echo "daq.update     # update to the most recent software versions"
+    echo
+    echo "daq.version    # print the current daq version"
 
 }
 

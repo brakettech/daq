@@ -81,5 +81,6 @@ def infect():
 def update():
     configure()
     run('pip install -U braket-daq')
+    infect()
     cmd = f'cd {SERVER_PROJECT_PATH} && git pull'
     run(cmd)
