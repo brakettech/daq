@@ -12,10 +12,10 @@ import pandas as pd
 import xarray as xr
 
 
-class PrintCatcher(object):  # pragma: no cover  This is a testing utility that doesn't need to be covered
+class PrintCatcher(object):  # pragma: no cover  This is a testing utility
     def __init__(self, stream='stdout'):
         self.text = ''
-        if stream not in {'stdout', 'stderr'}:  # pragma: no cover  this is just a testing utitlity
+        if stream not in {'stdout', 'stderr'}:
             raise ValueError('stream must be either "stdout" or "stderr"')
         self.stream = stream
 
@@ -40,7 +40,9 @@ class PrintCatcher(object):  # pragma: no cover  This is a testing utility that 
 
 
 class CSV:
-    def __init__(self, file_name, nrows=None, standardize=True, max_sample_freq=1e6, **channel_names):
+    def __init__(
+            self, file_name, nrows=None, standardize=True,
+            max_sample_freq=1e6, **channel_names):
         """
         This class provides visualization capabilities for picoscope csv files
 
@@ -112,7 +114,6 @@ class CSV:
                     if line_no == 1:
                         units_line = line.strip()
 
-
             rex_list = [
                 re.compile(r'\((\S+)\),\((\S+)\),\((\S+)\),\((\S+)\),\((\S+)\)'),
                 re.compile(r'\((\S+)\),\((\S+)\),\((\S+)\),\((\S+)\)'),
@@ -126,13 +127,6 @@ class CSV:
                     self._units = list(m.groups())
                     break
 
-            ## when 3 channel present
-            ## rex = re.compile(r'\((\S+)\),\((\S+)\),\((\S+)\),\((\S+)\)')
-
-            ## when 4 channels present
-            #rex = re.compile(r'\((\S+)\),\((\S+)\),\((\S+)\),\((\S+)\),\((\S+)\)')
-
-            #self._units = list(rex.match(units_line).groups())
         return self._units
 
     @property
@@ -219,6 +213,7 @@ class CSV:
         if self.get_sample_freq(df) > self.max_sample_freq:
             df = self._down_sample(df, 1. / self.max_sample_freq)
         return df
+
 
 class Plotter:
     def __init__(self, frame_or_file):

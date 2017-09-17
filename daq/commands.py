@@ -36,19 +36,22 @@ def configure():
     if not os.path.isdir('/daqhome'):
         print('\n\nWarning: You haven\'t created a /daqhome directory.\n\n')
 
+
 @hug.cli()
 def backup():
     db_dump_path = SERVER_PROJECT_PATH.joinpath('dbdumps')
     if not db_dump_path.is_dir():
         run(f'mkdir {db_dump_path}')
 
-    dump_file = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S-%f') + '.json.gz'
+    dump_file = datetime.datetime.now().strftime(
+        '%Y-%m-%dT%H-%M-%S-%f') + '.json.gz'
     dump_file = db_dump_path.joinpath(dump_file)
-    cmd =  (
+    cmd = (
         f'cd {SERVER_PROJECT_PATH} && '
         f'python manage.py dumpdata | gzip >{dump_file}'
     )
     run(cmd)
+
 
 @hug.cli()
 def version():
@@ -73,12 +76,10 @@ def infect():
     print('Run this command to complete infection:  . ~/.bashrc')
     print()
 
+
 @hug.cli()
 def update():
     configure()
     run('pip install -U braket-daq')
     cmd = f'cd {SERVER_PROJECT_PATH} && git pull'
     run(cmd)
-
-
-

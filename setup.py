@@ -50,7 +50,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Topic :: Scientific/Engineering',
     ],
-    install_requires = [
+    install_requires=[
         'hug',
         'gunicorn'
     ],
