@@ -32,9 +32,9 @@ def configure():
         cmd = f'cd {SERVER_PROJECT_PATH.as_posix()} && python manage.py migrate'
         run(cmd)
 
-    # make sure daqhome simlink exists
-    if not os.path.isdir('/daqhome'):
-        print('\n\nWarning: You haven\'t created a /daqhome directory.\n\n')
+    # make sure daqroot simlink exists
+    if not os.path.isdir('/daqroot'):
+        print('\n\nWarning: You haven\'t created a /daqroot directory.\n\n')
 
 
 @hug.cli()
