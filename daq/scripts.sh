@@ -18,7 +18,12 @@ daq.ngrok() {
 
 # command to connect to remote (windows) machine
 daq.remote() {
-    ssh rob@1.tcp.ngrok.io -p 22084
+    echo
+    echo -------------------------------------
+    echo "ssh braket@1.tcp.ngrok.io -p 22084"
+    echo -------------------------------------
+
+    ssh braket@1.tcp.ngrok.io -p 22084
 
 }
 
