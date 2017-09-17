@@ -21,6 +21,12 @@ daq.remote() {
     ssh rob@1.tcp.ngrok.io -p 22084
 
 }
+
+# daq to connect to remote (windows) machine
+daq.cd() {
+    cd ~/daq_server/
+
+}
 ############ END DAQ FUNCTIONS #############################
 
 

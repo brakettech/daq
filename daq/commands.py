@@ -1,3 +1,4 @@
+import datetime
 import pathlib
 import re
 import hug
@@ -19,6 +20,37 @@ def run(cmd, echo=True, dry_run=False):
 
 
 @hug.cli()
+def configure():
+    backup()
+    # make sure server is installed
+    if not SERVER_PROJECT_PATH.is_dir():
+        cmd = 'cd ~ && git clone git@github.com:brakettech/daq_server.git'
+        run(cmd)
+
+    # make sure db file exists
+    if not SERVER_PROJECT_PATH.joinpath('db.sqlite3').is_file():
+        cmd = f'cd {SERVER_PROJECT_PATH.as_posix()} && python manage.py migrate'
+        run(cmd)
+
+    # make sure daqhome simlink exists
+    if not os.path.isdir('/daqhome'):
+        print('\n\nWarning: You haven\'t created a /daqhome directory.\n\n')
+
+@hug.cli()
+def backup():
+    db_dump_path = SERVER_PROJECT_PATH.joinpath('dbdumps')
+    if not db_dump_path.is_dir():
+        run(f'mkdir {db_dump_path}')
+
+    dump_file = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S-%f') + '.json.gz'
+    dump_file = db_dump_path.joinpath(dump_file)
+    cmd =  (
+        f'cd {SERVER_PROJECT_PATH} && '
+        f'python manage.py dumpdata | gzip >{dump_file}'
+    )
+    run(cmd)
+
+@hug.cli()
 def version():
     with open(VERSION_FILE) as in_file:
         version_file_contents = in_file.read()
@@ -26,11 +58,6 @@ def version():
                               version_file_contents, re.M)
     if version_match:
         print('braket-daq=={}'.format(version_match.group(1)))
-
-
-@hug.cli()
-def cd():
-    run(f'cd {SERVER_PROJECT_PATH}')
 
 
 @hug.cli()
@@ -48,5 +75,10 @@ def infect():
 
 @hug.cli()
 def update():
+    configure()
     run('pip install -U braket-daq')
+    cmd = f'cd {SERVER_PROJECT_PATH} && git pull'
+    run(cmd)
+
+
 
