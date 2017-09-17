@@ -13,7 +13,7 @@ daq.init() {
 # function that allows remote ssh access via ngrok
 daq.ngrok() {
     sudo service ssh --full-restart
-    ngrok tcp  --log stdout --region=us --remote-addr braket@1.tcp.ngrok.io:22084 22
+    ngrok tcp  --log stdout --region=us --remote-addr 1.tcp.ngrok.io:22084 22
 }
 
 # command to connect to remote (windows) machine
