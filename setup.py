@@ -58,7 +58,6 @@ setup(
         'console_scripts': [
             'daq.version = daq.commands:version.interface.cli',
             'daq.infect = daq.commands:infect.interface.cli',
-            'daq.update = daq.commands:update.interface.cli',
             'daq.configure = daq.commands:configure.interface.cli',
             'daq.backup = daq.commands:backup.interface.cli',
         ],

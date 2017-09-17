@@ -28,6 +28,13 @@ daq.cd() {
 
 }
 
+# update all daq code
+daq.update() {
+    daq.init
+    pip install -U braket-daq
+    cd ~/daq_server/ && git pull
+}
+
 # command to start server
 daq.server() {
     daq.init
@@ -44,6 +51,7 @@ daq.server() {
     echo ===============================================
     echo
     gunicorn daq.wsgi -b 0.0.0.0:8888
+    cd ~
 
 }
 

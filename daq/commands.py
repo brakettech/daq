@@ -75,12 +75,3 @@ def infect():
     print('\n\n')
     print('Run this command to complete infection:  . ~/.bashrc')
     print()
-
-
-@hug.cli()
-def update():
-    configure()
-    run('pip install -U braket-daq')
-    infect()
-    cmd = f'cd {SERVER_PROJECT_PATH} && git pull'
-    run(cmd)
