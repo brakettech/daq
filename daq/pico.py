@@ -235,6 +235,12 @@ class Plotter:
         self.unit_map = {'t': 'seconds'}
         self.unit_map.update({chan: 'volts' for chan in self.channels})
 
+    def __str__(self):
+        return str(self.channels)
+    
+    def __repr__(self):
+        return self.__str__()
+
     def load(self, frame_or_file):
         if isinstance(frame_or_file, pd.DataFrame):
             df = frame_or_file
@@ -247,7 +253,8 @@ class Plotter:
             if file.suffix == '.csv':
                 df = CSV(frame_or_file).df
             elif file.suffix == '.nc':
-                df = Data().load(frame_or_file)
+                data = Data()
+                df = data.load(frame_or_file)
             else:
                 raise ValueError('File type {} not recognized'.format(file.suffix))
         else:
@@ -266,18 +273,30 @@ class Plotter:
         self.hv.util.opts('RGB [width=800 height=400]', disp)
         return disp
 
-    def plot_time_series(self, *channels):
+    def validate_channels(self, channels):
+        if not channels:
+            raise ValueError('\n\nYou must specify at least one channel')
+        if len(channels) > 2:
+            raise ValueError('\n\nYou can plot at most 2 channels for now')
+
+        bad_channels = set(channels) - set(self.channels)
+        if bad_channels or not channels:
+            raise ValueError('\n\nMust supply channel names from {}'.format(self.channels))
+
+    def plot_time_series(self, *channels, color=None):
         """
         Plot time series for the supplied channel names.
 
         :type channels: str
         :param channels: *args of channel names
         """
-        bad_channels = set(channels) - set(self.channels)
-        if bad_channels or not channels:
-            raise ValueError('\n\n Must supply channel names from {}'.format(self.channels))
+        self.validate_channels(channels)
         time_dim = self.hv.Dimension('time', label='time', unit=self.unit_map['t'])
-        colors = ['blue', 'red', 'green', 'black']
+        if color is None:
+            colors = ['blue', 'red', 'green', 'black']
+        else:
+            colors = [color, color, color, color]
+
         curves = []
         for ind, channel in enumerate(channels):
             chan_dim = self.hv.Dimension(channel, label=channel, unit=self.unit_map[channel])
@@ -290,6 +309,7 @@ class Plotter:
 
     @lru_cache()
     def get_spectrum(self, channel, db=True, normalized=False):
+
         df = self.lomb_scargle(self.df, 't', channel, freq_order=True)
         if normalized:
             df.loc[:, 'power'] = df.power / df.power.sum()
@@ -310,6 +330,7 @@ class Plotter:
         :type normalize: bool
         :param normalize: Normalize spectrum so that sum(power) = 1
         """
+        self.validate_channels([channel])
 
         df = self.get_spectrum(channel, db=db, normalized=normalized)
         freq_dim = self.hv.Dimension('freq', label='freq', unit='Hz')
@@ -395,9 +416,29 @@ class Data:
         self.meta = meta
         return meta
 
+    def get_channel_mappings(self):
+        allowed_names = {
+            'channel_a',
+            'channel_b',
+            'channel_c',
+            'channel_d',
+        }
+        mappings = {}
+        for k, v in self.meta.items():
+            if k in allowed_names:
+                mappings[k.replace('channel_', '')] = v
+        return mappings
+
+
     def load(self, netcdf_file_name, channel_mappings=None):
+        # load the data into a dataframe and extract the meta
+        with self.dataset(netcdf_file_name) as dset:
+            self.meta = dset.attrs
+            df = dset.to_dataframe()
+
+        # fill the channel mappings
         if channel_mappings is None:
-            channel_mappings = {}
+            channel_mappings = self.get_channel_mappings()
 
         specified_channels = set(channel_mappings.keys())
         allowed_channels = set('abcd')
@@ -405,10 +446,6 @@ class Data:
         if bad_channels:
             raise ValueError('Channel names must be taken from {}'.format(allowed_channels))
 
-        # load the data into a dataframe and extract the meta
-        with self.dataset(netcdf_file_name) as dset:
-            self.meta = dset.attrs
-            df = dset.to_dataframe()
 
         # extract the scale mapping for all columns
         rex_scale = re.compile(r'__scale_([a-z])__')
@@ -430,3 +467,4 @@ class Data:
         # rename channels
         df.rename(columns=channel_mappings, inplace=True)
         self.df = df
+        return df
