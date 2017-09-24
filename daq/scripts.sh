@@ -55,7 +55,7 @@ daq.server() {
     echo
     echo ===============================================
     echo
-    gunicorn daq.wsgi -b 0.0.0.0:8888
+    python manage.py runserver 88888
     cd ~
 
 }
