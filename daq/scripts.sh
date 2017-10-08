@@ -49,13 +49,13 @@ daq.server() {
     echo
     echo ===============================================
     echo
-    echo Point your browser to http://localhost:8888
+    echo Point your browser to http://localhost:9999
     echo
     echo ctrl-c to shut-down server
     echo
     echo ===============================================
     echo
-    python manage.py runserver 88888
+    python manage.py runserver 9999
     cd ~
 
 }
