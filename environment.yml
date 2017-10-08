@@ -13,6 +13,8 @@ dependencies:
     - statsmodels=0.8.0=np113py36_0
     - tornado=4.4.2=py36_0
     - pip:
+        - SchemDraw
+        - braket-daq
         - django==1.11.4
         - gatspy==0.3
         - gunicorn==19.7.1
@@ -20,4 +22,5 @@ dependencies:
         - pandashells==0.1.8
         - seaborn==0.8.1
         - supersmoother==0.4
-        - braket-daq
+        - sympy
+
