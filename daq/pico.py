@@ -6,6 +6,7 @@ import itertools
 import re
 import sys
 import pathlib
+from io import StringIO
 
 import numpy as np
 import pandas as pd
@@ -204,7 +205,17 @@ class CSV:
         :type nrows: int
         :param df: The maxinumum number of rows to load (defaults to all)
         """
-        df = pd.read_csv(self.file_name, skiprows=[1, 2], nrows=nrows)
+        # remove bad characters from file buffer
+        bad_chars = ['-∞', '∞']
+        with open(self.file_name) as file:
+            contents = file.read()
+            for char in bad_chars:
+                contents = contents.replace(char, '')
+
+            # create a dataframe from file and fill nans
+            df = pd.read_csv(StringIO(contents), dtype=np.float64, skiprows=[1, 2], nrows=nrows)
+            df.fillna(method='ffill', inplace=True)
+
         self._rename_columns(df)
         self._customize_names(df)
         if self._standardize:
@@ -216,10 +227,13 @@ class CSV:
 
 
 class Plotter:
-    def __init__(self, frame_or_file):
+    def __init__(self, frame_or_file, max_sample_freq=1e6):
+        self.max_sample_freq = max_sample_freq
         self.df = self.load(frame_or_file)
-        # weird import location because holoviews is really heavy and I don't want it loaded unless I need it
-        # continuum stuff has annoying deprecation warnings so blank them with stderr catcher
+        # weird import location because holoviews is really heavy and I don't
+        #  want it loaded unless I need it
+        # continuum stuff has annoying deprecation warnings so blank them with
+        #  stderr catcher
         with PrintCatcher('stderr'):
             import datashader as ds
             import holoviews as hv
@@ -237,7 +251,7 @@ class Plotter:
 
     def __str__(self):
         return str(self.channels)
-    
+
     def __repr__(self):
         return self.__str__()
 
@@ -251,7 +265,7 @@ class Plotter:
                 raise ValueError('File {} does not exist'.format(file.as_posix()))
 
             if file.suffix == '.csv':
-                df = CSV(frame_or_file).df
+                df = CSV(frame_or_file, max_sample_freq=self.max_sample_freq).df
             elif file.suffix == '.nc':
                 data = Data()
                 df = data.load(frame_or_file)
@@ -429,7 +443,6 @@ class Data:
                 mappings[k.replace('channel_', '')] = v
         return mappings
 
-
     def load(self, netcdf_file_name, channel_mappings=None):
         # load the data into a dataframe and extract the meta
         with self.dataset(netcdf_file_name) as dset:
@@ -445,7 +458,6 @@ class Data:
         bad_channels = specified_channels - allowed_channels
         if bad_channels:
             raise ValueError('Channel names must be taken from {}'.format(allowed_channels))
-
 
         # extract the scale mapping for all columns
         rex_scale = re.compile(r'__scale_([a-z])__')
